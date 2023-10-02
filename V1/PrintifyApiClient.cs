@@ -250,9 +250,9 @@ namespace PrintifyApi.V1
         - GET /v1/shops/{shop_id}/products.json
         - GET /v1/shops/{shop_id}/products/{product_id}.json
         - POST /v1/shops/{shop_id}/products.json
-         - PUT /v1/shops/{shop_id}/products/{product_id}.json
-        DELETE /v1/shops/{shop_id}/products/{product_id}.json
-        POST /v1/shops/{shop_id}/products/{product_id}/publish.json
+        - PUT /v1/shops/{shop_id}/products/{product_id}.json
+        - DELETE /v1/shops/{shop_id}/products/{product_id}.json
+        - POST /v1/shops/{shop_id}/products/{product_id}/publish.json
         POST /v1/shops/{shop_id}/products/{product_id}/publishing_succeeded.json
         POST /v1/shops/{shop_id}/products/{product_id}/publishing_failed.json
         POST /v1/shops/{shop_id}/products/{product_id}/unpublish.json
@@ -350,6 +350,41 @@ namespace PrintifyApi.V1
             string route = $"/v1/shops/{shopId}/products/{productId}/publish.json";
             StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(publishProductRequest));
             await PostAsync(route, requestContent);
+        }
+
+        /// <summary>
+        /// Set product publish status to succeeded
+        /// <para />
+        /// <see href="https://developers.printify.com/#set-product-publish-status-to-succeeded"/>
+        /// </summary>
+        public async Task PublishProductSucceededAsync(int shopId, int productId, PublishProductSucceededRequest publishProductSucceededRequest)
+        {
+            string route = $"/v1/shops/{shopId}/products/{productId}/publish.json";
+            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(publishProductSucceededRequest));
+            await PostAsync(route, requestContent);
+        }
+
+        /// <summary>
+        /// Set product publish status to failed
+        /// <para />
+        /// <see href="https://developers.printify.com/#set-product-publish-status-to-failed"/>
+        /// </summary>
+        public async Task PublishProductFailedAsync(int shopId, int productId, PublishProductFailedRequest publishProductFailedRequest)
+        {
+            string route = $"/v1/shops/{shopId}/products/{productId}/publishing_failed.json";
+            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(publishProductFailedRequest));
+            await PostAsync(route, requestContent);
+        }
+
+        /// <summary>
+        /// Notify that a product has been unpublished
+        /// <para />
+        /// <see href="https://developers.printify.com/#notify-that-a-product-has-been-unpublished"/>
+        /// </summary>
+        public async Task UnpublishProductAsync(int shopId, int productId)
+        {
+            string route = $"/v1/shops/{shopId}/products/{productId}/unpublish.json";
+            await PostAsync(route, null);
         }
 
         #endregion

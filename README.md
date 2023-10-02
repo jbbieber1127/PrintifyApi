@@ -1,3 +1,3 @@
 # PrintifyApi
 
-Implementation of [Printify's API](https://developers.printify.com)
+Unofficial implementation of [Printify's API](https://developers.printify.com)
