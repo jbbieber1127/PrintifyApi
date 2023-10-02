@@ -1,7 +1,9 @@
 ﻿using PrintifyApi.V1.Models.Catalog.Blueprints;
 using PrintifyApi.V1.Models.Catalog.Blueprints.ShippingInformation;
+using PrintifyApi.V1.Models.Shops;
 using PrintifyApi.V1.Models.Shops.Orders;
 using PrintifyApi.V1.Models.Shops.Orders.Create;
+using PrintifyApi.V1.Models.Shops.Products;
 using System.Collections.Specialized;
 
 namespace PrintifyApi.V1
@@ -215,22 +217,146 @@ namespace PrintifyApi.V1
 
         #endregion
 
+        #region Shops
+        /// <summary>
+        /// View the list of existing shops in a Printify account
+        /// <para />
+        /// <see href="https://developers.printify.com/#retrieve-a-list-of-existing-shops"/>
+        /// </summary>
+        public async Task<List<Shop>> GetShopsAsync()
+        {
+            string route = "/v1/shops.json";
+            HttpResponseMessage resp = await GetAsync(route);
+            string content = await resp.Content.ReadAsStringAsync();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Shop>>(content);
+        }
+
+        /// <summary>
+        /// Disconnect a shop from a Printify account
+        /// <para />
+        /// <see href="https://developers.printify.com/#disconnect-a-shop"/>
+        /// </summary>
+        public async void DisconnectShopAsync(int shopId)
+        {
+            string route = $"/v1/shops/{shopId}/conection.json";
+            await DeleteAsync(route);
+        }
+
+
+        #endregion
+
         /*
         
-
-        
-        GET /v1/shops.json
-        DELETE /v1/shops/{shop_id}/connection.json
-
-        GET /v1/shops/{shop_id}/products.json
-        GET /v1/shops/{shop_id}/products/{product_id}.json
-        POST /v1/shops/{shop_id}/products.json
-        PUT /v1/shops/{shop_id}/products/{product_id}.json
+        - GET /v1/shops/{shop_id}/products.json
+        - GET /v1/shops/{shop_id}/products/{product_id}.json
+        - POST /v1/shops/{shop_id}/products.json
+         - PUT /v1/shops/{shop_id}/products/{product_id}.json
         DELETE /v1/shops/{shop_id}/products/{product_id}.json
         POST /v1/shops/{shop_id}/products/{product_id}/publish.json
         POST /v1/shops/{shop_id}/products/{product_id}/publishing_succeeded.json
         POST /v1/shops/{shop_id}/products/{product_id}/publishing_failed.json
         POST /v1/shops/{shop_id}/products/{product_id}/unpublish.json
+
+        */
+
+        #region Products
+
+        /// <summary>
+        /// Retrieve a list of products
+        /// <para />
+        /// <see href="https://developers.printify.com/#retrieve-a-list-of-products"/>
+        /// </summary>
+        public async Task<List<Product>> GetProductsAsync(int shopId, int limit = 10, int page = 0)
+        {
+            string route = $"/v1/shops/{shopId}/products.json";
+            NameValueCollection queryString = new();
+            if (limit > 0)
+            {
+                queryString.Add("limit", limit.ToString());
+            }
+            if (page > 0)
+            {
+                queryString.Add("page", page.ToString());
+            }
+            if (queryString.Count > 0)
+            {
+                route += "?" + queryString.ToString();
+            }
+            HttpResponseMessage resp = await GetAsync(route);
+            string content = await resp.Content.ReadAsStringAsync();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Product>>(content);
+        }
+
+        /// <summary>
+        /// Retrieve a product
+        /// <para />
+        /// <see href="https://developers.printify.com/#retrieve-a-list-of-products"/>
+        /// </summary>
+        public async Task<Product> GetProductAsync(int shopId, int productId)
+        {
+            string route = $"/v1/shops/{shopId}/products/{productId}.json";
+            HttpResponseMessage resp = await GetAsync(route);
+            string content = await resp.Content.ReadAsStringAsync();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<Product>(content);
+        }
+
+        /// <summary>
+        /// Create a product
+        /// <para />
+        /// <see href="https://developers.printify.com/#create-a-new-product"/>
+        /// </summary>
+        public async Task<Product> CreateProductAsync(int shopId, Product product)
+        {
+            string route = $"/v1/shops/{shopId}/products.json";
+            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(product));
+            HttpResponseMessage resp = await PostAsync(route, requestContent);
+            string responseContent = await resp.Content.ReadAsStringAsync();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<Product>(responseContent);
+        }
+
+
+        /// <summary>
+        /// Update a product
+        /// <para />
+        /// <see href="https://developers.printify.com/#update-a-product"/>
+        /// </summary>
+        public async Task<Product> UpdateProductAsync(int shopId, Product product)
+        {
+            string route = $"/v1/shops/{shopId}/products.json";
+            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(product));
+            HttpResponseMessage resp = await PutAsync(route, requestContent);
+            string responseContent = await resp.Content.ReadAsStringAsync();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<Product>(responseContent);
+        }
+
+        /// <summary>
+        /// Delete a product
+        /// <para />
+        /// <see href="https://developers.printify.com/#delete-a-product"/>
+        /// </summary>
+        public async void DeleteProduct(int shopId, int productId)
+        {
+            string route = $"/v1/shops/{shopId}/products/{productId}.json";
+            await DeleteAsync(route);
+        }
+
+        /// <summary>
+        /// Publish a product
+        /// <para />
+        /// <see href="https://developers.printify.com/#create-a-new-product"/>
+        /// </summary>
+        public async Task PublishProductAsync(int shopId, int productId, PublishProductRequest publishProductRequest)
+        {
+            string route = $"/v1/shops/{shopId}/products/{productId}/publish.json";
+            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(publishProductRequest));
+            await PostAsync(route, requestContent);
+        }
+
+        #endregion
+
+
+
+        /*
 
         GET /v1/uploads.json
         GET /v1/uploads/{image_id}.json
