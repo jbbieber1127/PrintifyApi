@@ -120,7 +120,7 @@ namespace PrintifyApi.V1
         public async Task<List<Order>> GetOrdersAsync(int shopId, int limit = 0, int page = 0, string status = "", string sku = "")
         {
             string route = $"/v1/shops/{shopId}/orders.json";
-            NameValueCollection queryString = new NameValueCollection();
+            NameValueCollection queryString = new();
             if (limit > 0)
             {
                 queryString.Add("limit", limit.ToString());
