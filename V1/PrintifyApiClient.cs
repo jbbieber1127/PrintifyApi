@@ -13,17 +13,7 @@ namespace PrintifyApi.V1
             BaseAddress = new Uri(baseUrl);
             DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
         }
-        /*
-         
-        Catalog Resource
-        - GET /v1/catalog/blueprints.json
-        - GET /v1/catalog/blueprints/{blueprint_id}.json
-        - GET /v1/catalog/blueprints/{blueprint_id}/print_providers.json
-        - GET /v1/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/variants.json
-        - GET /v1/catalog/blueprints/{blueprint_id}/print_providers/{print_provider_id}/shipping.json
-        - GET /v1/catalog/print_providers.json
-        - GET /v1/catalog/print_providers/{print_provider_id}.json
-         */
+       
         #region Catalog
         /// <summary>
         /// Retrieves list of blueprints in the catalog
@@ -120,20 +110,6 @@ namespace PrintifyApi.V1
 
         #endregion
 
-
-
-        /*
-        Order Resource
-        - GET /v1/shops/{shop_id}/orders.json
-        - GET /v1/shops/{shop_id}/orders/{order_id}.json
-        POST /v1/shops/{shop_id}/orders.json
-        POST /v1/shops/{shop_id}/orders/{order_id}/send_to_production.json
-        https://developers.printify.com/#send-an-existing-order-to-production
-        POST /v1/shops/{shop_id}/orders/shipping.json
-        https://developers.printify.com/#calculate-the-shipping-cost-of-an-order
-        POST /v1/shops/{shop_id}/orders/{order_id}/cancel.json
-        https://developers.printify.com/#cancel-an-order
-         */
         #region Orders
 
         /// <summary>
@@ -198,17 +174,43 @@ namespace PrintifyApi.V1
         }
 
         /// <summary>
-        /// Order an existing product
+        /// Send an existing order to production
         /// <para />
-        /// <see href="https://developers.printify.com/#submit-an-order"/>
+        /// <see href="https://developers.printify.com/#send-an-existing-order-to-production"/>
         /// </summary>
-        public async Task<PostOrderResponse> PostOrderToProductionAsync(int shopId, OrderRequest order)
+        public async Task<InitiatedOrder> PostOrderToProductionAsync(int shopId, int orderId)
         {
-            string route = $"/v1/shops/{shopId}/orders.json";
+            string route = $"/v1/shops/{shopId}/orders/{orderId}/send_to_production.json";
+            HttpResponseMessage resp = await PostAsync(route, null);
+            string responseContent = await resp.Content.ReadAsStringAsync();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<InitiatedOrder>(responseContent);
+        }
+
+        /// <summary>
+        /// Calculate the shipping cost of an order
+        /// <para />
+        /// <see href="https://developers.printify.com/#calculate-the-shipping-cost-of-an-order"/>
+        /// </summary>
+        public async Task<ShippingCostResponse> CalculateShippingCostAsync(int shopId, ShippingRequest order)
+        {
+            string route = $"/v1/shops/{shopId}/orders/shipping.json";
             StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(order));
             HttpResponseMessage resp = await PostAsync(route, requestContent);
             string responseContent = await resp.Content.ReadAsStringAsync();
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<PostOrderResponse>(responseContent);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ShippingCostResponse>(responseContent);
+        }
+
+        /// <summary>
+        /// Cancel an order
+        /// <para />
+        /// <see href="https://developers.printify.com/#cancel-an-order"/>
+        /// </summary>
+        public async Task<InitiatedOrder> CancelOrder(int shopId, int orderId)
+        {
+            string route = $"/v1/shops/{shopId}/orders/{orderId}/cancel.json";
+            HttpResponseMessage resp = await PostAsync(route, null);
+            string responseContent = await resp.Content.ReadAsStringAsync();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<InitiatedOrder>(responseContent);
         }
 
         #endregion
