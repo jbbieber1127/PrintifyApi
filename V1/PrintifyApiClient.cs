@@ -245,19 +245,6 @@ namespace PrintifyApi.V1
 
         #endregion
 
-        /*
-        
-        - GET /v1/shops/{shop_id}/products.json
-        - GET /v1/shops/{shop_id}/products/{product_id}.json
-        - POST /v1/shops/{shop_id}/products.json
-        - PUT /v1/shops/{shop_id}/products/{product_id}.json
-        - DELETE /v1/shops/{shop_id}/products/{product_id}.json
-        - POST /v1/shops/{shop_id}/products/{product_id}/publish.json
-        POST /v1/shops/{shop_id}/products/{product_id}/publishing_succeeded.json
-        POST /v1/shops/{shop_id}/products/{product_id}/publishing_failed.json
-        POST /v1/shops/{shop_id}/products/{product_id}/unpublish.json
-
-        */
 
         #region Products
 
