@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
-using PrintifyApi.V1.Models.Shops.Orders.Create;
 
-namespace PrintifyApi.V1.Models.Shops.Orders
+namespace PrintifyApi.V1.Models.Shops.Orders.Create
 {
     public class ShippingRequest
     {
