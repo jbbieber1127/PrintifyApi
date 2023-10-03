@@ -1,9 +1,11 @@
-﻿using PrintifyApi.V1.Models.Catalog.Blueprints;
+﻿using PrintifyApi.V1.Models;
+using PrintifyApi.V1.Models.Catalog.Blueprints;
 using PrintifyApi.V1.Models.Catalog.Blueprints.ShippingInformation;
 using PrintifyApi.V1.Models.Shops;
 using PrintifyApi.V1.Models.Shops.Orders;
 using PrintifyApi.V1.Models.Shops.Orders.Create;
 using PrintifyApi.V1.Models.Shops.Products;
+using PrintifyApi.V1.Models.Uploads;
 using System.Collections.Specialized;
 
 namespace PrintifyApi.V1
@@ -15,7 +17,7 @@ namespace PrintifyApi.V1
             BaseAddress = new Uri(baseUrl);
             DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
         }
-       
+
         #region Catalog
         /// <summary>
         /// Retrieves list of blueprints in the catalog
@@ -119,7 +121,7 @@ namespace PrintifyApi.V1
         /// <para />
         /// <see href="https://developers.printify.com/#retrieve-a-list-of-orders"/>
         /// </summary>
-        public async Task<List<Order>> GetOrdersAsync(int shopId, int limit = 0, int page = 0, string status = "", string sku = "")
+        public async Task<PaginatedResponse<Order>> GetOrdersAsync(int shopId, int limit = 0, int page = 0, string status = "", string sku = "")
         {
             string route = $"/v1/shops/{shopId}/orders.json";
             NameValueCollection queryString = new();
@@ -145,7 +147,7 @@ namespace PrintifyApi.V1
             }
             HttpResponseMessage resp = await GetAsync(route);
             string content = await resp.Content.ReadAsStringAsync();
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Order>>(content);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<PaginatedResponse<Order>>(content);
         }
 
         /// <summary>
@@ -253,7 +255,7 @@ namespace PrintifyApi.V1
         /// <para />
         /// <see href="https://developers.printify.com/#retrieve-a-list-of-products"/>
         /// </summary>
-        public async Task<List<Product>> GetProductsAsync(int shopId, int limit = 10, int page = 0)
+        public async Task<PaginatedResponse<Product>> GetProductsAsync(int shopId, int limit = 10, int page = 0)
         {
             string route = $"/v1/shops/{shopId}/products.json";
             NameValueCollection queryString = new();
@@ -271,7 +273,7 @@ namespace PrintifyApi.V1
             }
             HttpResponseMessage resp = await GetAsync(route);
             string content = await resp.Content.ReadAsStringAsync();
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Product>>(content);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<PaginatedResponse<Product>>(content);
         }
 
         /// <summary>
@@ -377,13 +379,90 @@ namespace PrintifyApi.V1
         #endregion
 
 
+        #region Uploads
+
+        /// <summary>
+        /// Retrieve a list of uploaded images
+        /// <para />
+        /// <see href="https://developers.printify.com/#retrieve-a-list-of-uploaded-images"/>
+        /// </summary>
+        public async Task<PaginatedResponse<ImageUpload>> GetUploadsAsync(int limit, int page)
+        {
+            string route = $"/v1/uploads.json";
+            NameValueCollection queryString = new();
+            if (limit > 0)
+            {
+                queryString.Add("limit", limit.ToString());
+            }
+            if (page > 0)
+            {
+                queryString.Add("page", page.ToString());
+            }
+            if (queryString.Count > 0)
+            {
+                route += "?" + queryString.ToString();
+            }
+            HttpResponseMessage resp = await GetAsync(route);
+            string content = await resp.Content.ReadAsStringAsync();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<PaginatedResponse<ImageUpload>>(content);
+        }
+
+        /// <summary>
+        /// Retrieve an uploaded image by id
+        /// <para />
+        /// <see href="https://developers.printify.com/#retrieve-an-uploaded-image-by-id"/>
+        /// </summary>
+        public async Task<ImageUpload> GetUploadAsync(string uploadId)
+        {
+            string route = $"/v1/uploads/{uploadId}.json";
+            HttpResponseMessage resp = await GetAsync(route);
+            string content = await resp.Content.ReadAsStringAsync();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ImageUpload>(content);
+        }
+
+        /// <summary>
+        /// Upload an image via url
+        /// <para />
+        /// <see href="https://developers.printify.com/#create-a-new-product"/>
+        /// </summary>
+        public async Task<ImageUpload> UploadImageAsync(ImageUrlUploadRequest imageUploadRequest)
+        {
+            string route = $"/v1/uploads/images.json";
+            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(imageUploadRequest));
+            HttpResponseMessage resp = await PostAsync(route, requestContent);
+            string responseContent = await resp.Content.ReadAsStringAsync();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ImageUpload>(responseContent);
+        }
+
+        /// <summary>
+        /// Upload an image via base-64 encoded content
+        /// <para />
+        /// <see href="https://developers.printify.com/#create-a-new-product"/>
+        /// </summary>
+        public async Task<ImageUpload> UploadImageAsync(ImageContentUploadRequest imageUploadRequest)
+        {
+            string route = $"/v1/uploads/images.json";
+            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(imageUploadRequest));
+            HttpResponseMessage resp = await PostAsync(route, requestContent);
+            string responseContent = await resp.Content.ReadAsStringAsync();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<ImageUpload>(responseContent);
+        }
+
+        /// <summary>
+        /// Archive an uploaded image
+        /// <para />
+        /// <see href="https://developers.printify.com/#create-a-new-product"/>
+        /// </summary>
+        public async Task ArchiveUploadedImageAsync(string uploadId)
+        {
+            string route = $"/v1/uploads/{uploadId}/archive.json";
+            HttpResponseMessage resp = await PostAsync(route, null);
+            await resp.Content.ReadAsStringAsync();
+        }
+
+        #endregion
 
         /*
-
-        GET /v1/uploads.json
-        GET /v1/uploads/{image_id}.json
-        POST /v1/uploads/images.json
-        POST /v1/uploads/{image_id}/archive.json
 
         GET /v1/shops/{shop_id}/webhooks.json
         POST /v1/shops/{shop_id}/webhooks.json

@@ -1,15 +1,15 @@
 ﻿using Newtonsoft.Json;
 using PrintifyApi.V1.Models.Shops;
 
-namespace PrintifyApi.V1.Models.Shops.Orders
+namespace PrintifyApi.V1.Models
 {
-    public class PrintifyOrdersResponse
+    public class PaginatedResponse<T>
     {
         [JsonProperty("current_page")]
         public int CurrentPage { get; set; }
 
         [JsonProperty("data")]
-        public List<Order> Data { get; set; }
+        public List<T> Data { get; set; }
 
         [JsonProperty("first_page_url")]
         public string FirstPageUrl { get; set; }
