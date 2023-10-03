@@ -122,7 +122,7 @@ namespace PrintifyApi.V1
         /// <para />
         /// <see href="https://developers.printify.com/#retrieve-a-list-of-orders"/>
         /// </summary>
-        public async Task<PaginatedResponse<Order>> GetOrdersAsync(int shopId, int limit = 0, int page = 0, string status = "", string sku = "")
+        public async Task<PaginatedResponse<Order>> GetOrdersAsync(int shopId, int limit = 10, int page = 0, string status = "", string sku = "")
         {
             string route = $"/v1/shops/{shopId}/orders.json";
             NameValueCollection queryString = new();
@@ -156,7 +156,7 @@ namespace PrintifyApi.V1
         /// <para />
         /// <see href="https://developers.printify.com/#get-order-details-by-id"/>
         /// </summary>
-        public async Task<Order> GetOrderAsync(int shopId, int orderId)
+        public async Task<Order> GetOrderAsync(int shopId, string orderId)
         {
             string route = $"/v1/shops/{shopId}/orders/{orderId}.json";
             HttpResponseMessage resp = await GetAsync(route);
@@ -172,7 +172,7 @@ namespace PrintifyApi.V1
         public async Task<PostOrderResponse> PostOrderAsync(int shopId, OrderRequest order)
         {
             string route = $"/v1/shops/{shopId}/orders.json";
-            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(order));
+            StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(order));
             HttpResponseMessage resp = await PostAsync(route, requestContent);
             string responseContent = await resp.Content.ReadAsStringAsync();
             return Newtonsoft.Json.JsonConvert.DeserializeObject<PostOrderResponse>(responseContent);
@@ -183,7 +183,7 @@ namespace PrintifyApi.V1
         /// <para />
         /// <see href="https://developers.printify.com/#send-an-existing-order-to-production"/>
         /// </summary>
-        public async Task<InitiatedOrder> PostOrderToProductionAsync(int shopId, int orderId)
+        public async Task<InitiatedOrder> PostOrderToProductionAsync(int shopId, string orderId)
         {
             string route = $"/v1/shops/{shopId}/orders/{orderId}/send_to_production.json";
             HttpResponseMessage resp = await PostAsync(route, null);
@@ -199,7 +199,7 @@ namespace PrintifyApi.V1
         public async Task<ShippingCostResponse> CalculateShippingCostAsync(int shopId, ShippingRequest order)
         {
             string route = $"/v1/shops/{shopId}/orders/shipping.json";
-            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(order));
+            StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(order));
             HttpResponseMessage resp = await PostAsync(route, requestContent);
             string responseContent = await resp.Content.ReadAsStringAsync();
             return Newtonsoft.Json.JsonConvert.DeserializeObject<ShippingCostResponse>(responseContent);
@@ -210,7 +210,7 @@ namespace PrintifyApi.V1
         /// <para />
         /// <see href="https://developers.printify.com/#cancel-an-order"/>
         /// </summary>
-        public async Task<InitiatedOrder> CancelOrder(int shopId, int orderId)
+        public async Task<InitiatedOrder> CancelOrder(int shopId, string orderId)
         {
             string route = $"/v1/shops/{shopId}/orders/{orderId}/cancel.json";
             HttpResponseMessage resp = await PostAsync(route, null);
@@ -281,7 +281,7 @@ namespace PrintifyApi.V1
         /// <para />
         /// <see href="https://developers.printify.com/#retrieve-a-list-of-products"/>
         /// </summary>
-        public async Task<Product> GetProductAsync(int shopId, int productId)
+        public async Task<Product> GetProductAsync(int shopId, string productId)
         {
             string route = $"/v1/shops/{shopId}/products/{productId}.json";
             HttpResponseMessage resp = await GetAsync(route);
@@ -297,7 +297,7 @@ namespace PrintifyApi.V1
         public async Task<Product> CreateProductAsync(int shopId, Product product)
         {
             string route = $"/v1/shops/{shopId}/products.json";
-            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(product));
+            StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(product));
             HttpResponseMessage resp = await PostAsync(route, requestContent);
             string responseContent = await resp.Content.ReadAsStringAsync();
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Product>(responseContent);
@@ -312,7 +312,7 @@ namespace PrintifyApi.V1
         public async Task<Product> UpdateProductAsync(int shopId, Product product)
         {
             string route = $"/v1/shops/{shopId}/products.json";
-            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(product));
+            StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(product));
             HttpResponseMessage resp = await PutAsync(route, requestContent);
             string responseContent = await resp.Content.ReadAsStringAsync();
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Product>(responseContent);
@@ -323,7 +323,7 @@ namespace PrintifyApi.V1
         /// <para />
         /// <see href="https://developers.printify.com/#delete-a-product"/>
         /// </summary>
-        public async void DeleteProduct(int shopId, int productId)
+        public async void DeleteProduct(int shopId, string productId)
         {
             string route = $"/v1/shops/{shopId}/products/{productId}.json";
             await DeleteAsync(route);
@@ -334,10 +334,10 @@ namespace PrintifyApi.V1
         /// <para />
         /// <see href="https://developers.printify.com/#create-a-new-product"/>
         /// </summary>
-        public async Task PublishProductAsync(int shopId, int productId, PublishProductRequest publishProductRequest)
+        public async Task PublishProductAsync(int shopId, string productId, PublishProductRequest publishProductRequest)
         {
             string route = $"/v1/shops/{shopId}/products/{productId}/publish.json";
-            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(publishProductRequest));
+            StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(publishProductRequest));
             await PostAsync(route, requestContent);
         }
 
@@ -346,10 +346,10 @@ namespace PrintifyApi.V1
         /// <para />
         /// <see href="https://developers.printify.com/#set-product-publish-status-to-succeeded"/>
         /// </summary>
-        public async Task PublishProductSucceededAsync(int shopId, int productId, PublishProductSucceededRequest publishProductSucceededRequest)
+        public async Task PublishProductSucceededAsync(int shopId, string productId, PublishProductSucceededRequest publishProductSucceededRequest)
         {
             string route = $"/v1/shops/{shopId}/products/{productId}/publish.json";
-            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(publishProductSucceededRequest));
+            StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(publishProductSucceededRequest));
             await PostAsync(route, requestContent);
         }
 
@@ -358,10 +358,10 @@ namespace PrintifyApi.V1
         /// <para />
         /// <see href="https://developers.printify.com/#set-product-publish-status-to-failed"/>
         /// </summary>
-        public async Task PublishProductFailedAsync(int shopId, int productId, PublishProductFailedRequest publishProductFailedRequest)
+        public async Task PublishProductFailedAsync(int shopId, string productId, PublishProductFailedRequest publishProductFailedRequest)
         {
             string route = $"/v1/shops/{shopId}/products/{productId}/publishing_failed.json";
-            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(publishProductFailedRequest));
+            StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(publishProductFailedRequest));
             await PostAsync(route, requestContent);
         }
 
@@ -370,7 +370,7 @@ namespace PrintifyApi.V1
         /// <para />
         /// <see href="https://developers.printify.com/#notify-that-a-product-has-been-unpublished"/>
         /// </summary>
-        public async Task UnpublishProductAsync(int shopId, int productId)
+        public async Task UnpublishProductAsync(int shopId, string productId)
         {
             string route = $"/v1/shops/{shopId}/products/{productId}/unpublish.json";
             await PostAsync(route, null);
@@ -385,7 +385,7 @@ namespace PrintifyApi.V1
         /// <para />
         /// <see href="https://developers.printify.com/#retrieve-a-list-of-uploaded-images"/>
         /// </summary>
-        public async Task<PaginatedResponse<ImageUpload>> GetUploadsAsync(int limit, int page)
+        public async Task<PaginatedResponse<ImageUpload>> GetUploadsAsync(int limit = 10, int page = 0)
         {
             string route = $"/v1/uploads.json";
             NameValueCollection queryString = new();
@@ -427,7 +427,7 @@ namespace PrintifyApi.V1
         public async Task<ImageUpload> UploadImageAsync(ImageUrlUploadRequest imageUploadRequest)
         {
             string route = $"/v1/uploads/images.json";
-            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(imageUploadRequest));
+            StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(imageUploadRequest));
             HttpResponseMessage resp = await PostAsync(route, requestContent);
             string responseContent = await resp.Content.ReadAsStringAsync();
             return Newtonsoft.Json.JsonConvert.DeserializeObject<ImageUpload>(responseContent);
@@ -441,7 +441,7 @@ namespace PrintifyApi.V1
         public async Task<ImageUpload> UploadImageAsync(ImageContentUploadRequest imageUploadRequest)
         {
             string route = $"/v1/uploads/images.json";
-            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(imageUploadRequest));
+            StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(imageUploadRequest));
             HttpResponseMessage resp = await PostAsync(route, requestContent);
             string responseContent = await resp.Content.ReadAsStringAsync();
             return Newtonsoft.Json.JsonConvert.DeserializeObject<ImageUpload>(responseContent);
@@ -461,6 +461,7 @@ namespace PrintifyApi.V1
 
         #endregion
 
+        #region Webhooks
 
         /// <summary>
         /// Retrieve a list of webhooks
@@ -483,7 +484,7 @@ namespace PrintifyApi.V1
         public async Task<Webhook> CreateWebhookAsync(int shopId, WebhookCreateRequest webhookCreateRequest)
         {
             string route = $"/v1/shops/{shopId}/webhooks.json";
-            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(webhookCreateRequest));
+            StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(webhookCreateRequest));
             HttpResponseMessage resp = await PostAsync(route, requestContent);
             string responseContent = await resp.Content.ReadAsStringAsync();
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Webhook>(responseContent);
@@ -497,7 +498,7 @@ namespace PrintifyApi.V1
         public async Task<Webhook> UpdateWebhookAsync(int shopId, string webhookId, WebhookUpdateRequest webhookUpdateRequest)
         {
             string route = $"/v1/shops/{shopId}/webhooks/{webhookId}.json";
-            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(webhookUpdateRequest));
+            StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(webhookUpdateRequest));
             HttpResponseMessage resp = await PutAsync(route, requestContent);
             string responseContent = await resp.Content.ReadAsStringAsync();
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Webhook>(responseContent);
@@ -513,6 +514,8 @@ namespace PrintifyApi.V1
             string route = $"/v1/shops/{shopId}/webhooks/{webhookId}.json";
             await DeleteAsync(route);
         }
+
+        #endregion
 
     }
 }
