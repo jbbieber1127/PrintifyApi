@@ -5,6 +5,7 @@ using PrintifyApi.V1.Models.Shops;
 using PrintifyApi.V1.Models.Shops.Orders;
 using PrintifyApi.V1.Models.Shops.Orders.Create;
 using PrintifyApi.V1.Models.Shops.Products;
+using PrintifyApi.V1.Models.Shops.Webhooks;
 using PrintifyApi.V1.Models.Uploads;
 using System.Collections.Specialized;
 
@@ -247,7 +248,6 @@ namespace PrintifyApi.V1
 
         #endregion
 
-
         #region Products
 
         /// <summary>
@@ -378,7 +378,6 @@ namespace PrintifyApi.V1
 
         #endregion
 
-
         #region Uploads
 
         /// <summary>
@@ -462,13 +461,58 @@ namespace PrintifyApi.V1
 
         #endregion
 
-        /*
 
-        GET /v1/shops/{shop_id}/webhooks.json
-        POST /v1/shops/{shop_id}/webhooks.json
-        PUT /v1/shops/{shop_id}/webhooks/{webhook_id}.json
-        DELETE /v1/shops/{shop_id}/webhooks/{webhook_id}.json
-        */
+        /// <summary>
+        /// Retrieve a list of webhooks
+        /// <para />
+        /// <see href="https://developers.printify.com/#retrieve-a-list-of-webhooks"/>
+        /// </summary>
+        public async Task<List<Webhook>> GetWebhooksAsync(int shopId)
+        {
+            string route = $"/v1/shops/{shopId}/webhooks.json";
+            HttpResponseMessage resp = await GetAsync(route);
+            string content = await resp.Content.ReadAsStringAsync();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Webhook>>(content);
+        }
+
+        /// <summary>
+        /// Create a new webhook
+        /// <para />
+        /// <see href="https://developers.printify.com/#create-a-new-webhook"/>
+        /// </summary>
+        public async Task<Webhook> CreateWebhookAsync(int shopId, WebhookCreateRequest webhookCreateRequest)
+        {
+            string route = $"/v1/shops/{shopId}/webhooks.json";
+            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(webhookCreateRequest));
+            HttpResponseMessage resp = await PostAsync(route, requestContent);
+            string responseContent = await resp.Content.ReadAsStringAsync();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<Webhook>(responseContent);
+        }
+
+        /// <summary>
+        /// Modify a webhook
+        /// <para />
+        /// <see href="https://developers.printify.com/#create-a-new-webhook"/>
+        /// </summary>
+        public async Task<Webhook> UpdateWebhookAsync(int shopId, string webhookId, WebhookUpdateRequest webhookUpdateRequest)
+        {
+            string route = $"/v1/shops/{shopId}/webhooks/{webhookId}.json";
+            StringContent requestContent = new StringContent(Newtonsoft.Json.JsonConvert.SerializeObject(webhookUpdateRequest));
+            HttpResponseMessage resp = await PutAsync(route, requestContent);
+            string responseContent = await resp.Content.ReadAsStringAsync();
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<Webhook>(responseContent);
+        }
+
+        /// <summary>
+        /// Delete a webhook
+        /// <para />
+        /// <see href="https://developers.printify.com/#delete-a-webhook"/>
+        /// </summary>
+        public async Task DeleteWebhookAsync(int shopId, string webhookId)
+        {
+            string route = $"/v1/shops/{shopId}/webhooks/{webhookId}.json";
+            await DeleteAsync(route);
+        }
 
     }
 }
