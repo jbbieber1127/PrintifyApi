@@ -39,6 +39,23 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     }
 
     #region Catalog
+
+    /// <summary>
+    /// Retrieves list of blueprints in the catalog
+    /// <para />
+    /// <see href="https://developers.printify.com/#retrieve-a-list-of-available-blueprints"/>
+    /// </summary>
+    public async Task<string> Test(int blueprintId)
+    {
+        HttpClient client = new HttpClient();
+        //client.DefaultRequestHeaders.Authorization = this.DefaultRequestHeaders.Authorization;
+        string route = $"https://printify.com/product-catalog-service/api/v1/blueprints/{blueprintId}";
+        HttpResponseMessage resp = await client.GetAsync(route);
+        string content = await resp.Content.ReadAsStringAsync();
+        return content;
+        //return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Blueprint>>(content);
+    }
+
     /// <summary>
     /// Retrieves list of blueprints in the catalog
     /// <para />
