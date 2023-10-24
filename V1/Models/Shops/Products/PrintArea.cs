@@ -2,6 +2,9 @@
 
 namespace PrintifyApi.V1.Models.Shops.Products
 {
+    /// <summary>
+    /// Represents the designs for a product. If a product has variant-specific designs, there will be one PrintArea for each.
+    /// </summary>
     public class PrintArea
     {
         [JsonProperty("variant_ids")]
