@@ -42,8 +42,9 @@ namespace PrintifyApi.V1
         public async Task<BlueprintDetails> GetBlueprintDetailsAsync(int blueprintId)
         {
 
-            string route = $"/v1/blueprints/{blueprintId}";
+            string route = $"/product-catalog-service/api/v1/blueprints/{blueprintId}";
             HttpResponseMessage resp = await GetAsync(route);
+            resp.EnsureSuccessStatusCode();
             string content = await resp.Content.ReadAsStringAsync();
             return Newtonsoft.Json.JsonConvert.DeserializeObject<BlueprintDetails>(content);
         }

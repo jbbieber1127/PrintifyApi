@@ -45,26 +45,11 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     /// <para />
     /// <see href="https://developers.printify.com/#retrieve-a-list-of-available-blueprints"/>
     /// </summary>
-    public async Task<string> Test(int blueprintId)
-    {
-        HttpClient client = new HttpClient();
-        //client.DefaultRequestHeaders.Authorization = this.DefaultRequestHeaders.Authorization;
-        string route = $"https://printify.com/product-catalog-service/api/v1/blueprints/{blueprintId}";
-        HttpResponseMessage resp = await client.GetAsync(route);
-        string content = await resp.Content.ReadAsStringAsync();
-        return content;
-        //return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Blueprint>>(content);
-    }
-
-    /// <summary>
-    /// Retrieves list of blueprints in the catalog
-    /// <para />
-    /// <see href="https://developers.printify.com/#retrieve-a-list-of-available-blueprints"/>
-    /// </summary>
     public async Task<List<Blueprint>> GetBlueprintsAsync()
     {
         string route = "/v1/catalog/blueprints.json";
         HttpResponseMessage resp = await GetAsync(route);
+        resp.EnsureSuccessStatusCode();
         string content = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Blueprint>>(content);
     }
@@ -78,6 +63,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = $"/v1/catalog/blueprints/{blueprintId}.json";
         HttpResponseMessage resp = await GetAsync(route);
+        resp.EnsureSuccessStatusCode();
         string content = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<Blueprint>(content);
     }
@@ -93,6 +79,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
         int showOos = showOutOfStock ? 1 : 0;
         string route = $"/v1/catalog/blueprints/{blueprintId}/print_providers/{printProviderId}/variants.json?show-out-of-stock={showOos}";
         HttpResponseMessage resp = await GetAsync(route);
+        resp.EnsureSuccessStatusCode();
         string content = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<VariantsResponse>(content);
     }
@@ -106,6 +93,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = $"/v1/catalog/blueprints/{blueprintId}/print_providers.json";
         HttpResponseMessage resp = await GetAsync(route);
+        resp.EnsureSuccessStatusCode();
         string content = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<List<PrintProvider>>(content);
     }
@@ -119,6 +107,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = $"/v1/catalog/blueprints/{blueprintId}/print_providers/{printProviderId}/shipping.json";
         HttpResponseMessage resp = await GetAsync(route);
+        resp.EnsureSuccessStatusCode();
         string content = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<ShippingInformation>(content);
     }
@@ -132,6 +121,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = $"/v1/catalog/print_providers.json";
         HttpResponseMessage resp = await GetAsync(route);
+        resp.EnsureSuccessStatusCode();
         string content = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<List<PrintProvider>>(content);
     }
@@ -145,6 +135,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = $"/v1/catalog/{print_provider_id}.json";
         HttpResponseMessage resp = await GetAsync(route);
+        resp.EnsureSuccessStatusCode();
         string content = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<PrintProvider>(content);
     }
@@ -183,6 +174,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
             route += "?" + queryString.ToString();
         }
         HttpResponseMessage resp = await GetAsync(route);
+        resp.EnsureSuccessStatusCode();
         string content = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<PaginatedResponse<Order>>(content);
     }
@@ -196,6 +188,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = $"/v1/shops/{shopId}/orders/{orderId}.json";
         HttpResponseMessage resp = await GetAsync(route);
+        resp.EnsureSuccessStatusCode();
         string content = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<Order>(content);
     }
@@ -210,6 +203,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
         string route = $"/v1/shops/{shopId}/orders.json";
         StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(order));
         HttpResponseMessage resp = await PostAsync(route, requestContent);
+        resp.EnsureSuccessStatusCode();
         string responseContent = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<PostOrderResponse>(responseContent);
     }
@@ -223,6 +217,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = $"/v1/shops/{shopId}/orders/{orderId}/send_to_production.json";
         HttpResponseMessage resp = await PostAsync(route, null);
+        resp.EnsureSuccessStatusCode();
         string responseContent = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<InitiatedOrder>(responseContent);
     }
@@ -237,6 +232,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
         string route = $"/v1/shops/{shopId}/orders/shipping.json";
         StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(order));
         HttpResponseMessage resp = await PostAsync(route, requestContent);
+        resp.EnsureSuccessStatusCode();
         string responseContent = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<ShippingCostResponse>(responseContent);
     }
@@ -250,6 +246,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = $"/v1/shops/{shopId}/orders/{orderId}/cancel.json";
         HttpResponseMessage resp = await PostAsync(route, null);
+        resp.EnsureSuccessStatusCode();
         string responseContent = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<InitiatedOrder>(responseContent);
     }
@@ -266,6 +263,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = "/v1/shops.json";
         HttpResponseMessage resp = await GetAsync(route);
+        resp.EnsureSuccessStatusCode();
         string content = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Shop>>(content);
     }
@@ -278,7 +276,8 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     public async void DisconnectShopAsync(int shopId)
     {
         string route = $"/v1/shops/{shopId}/conection.json";
-        await DeleteAsync(route);
+        HttpResponseMessage resp = await DeleteAsync(route);
+        resp.EnsureSuccessStatusCode();
     }
 
 
@@ -308,6 +307,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
             route += "?" + queryString.ToString();
         }
         HttpResponseMessage resp = await GetAsync(route);
+        resp.EnsureSuccessStatusCode();
         string content = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<PaginatedResponse<Product>>(content);
     }
@@ -321,6 +321,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = $"/v1/shops/{shopId}/products/{productId}.json";
         HttpResponseMessage resp = await GetAsync(route);
+        resp.EnsureSuccessStatusCode();
         string content = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<Product>(content);
     }
@@ -335,6 +336,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
         string route = $"/v1/shops/{shopId}/products.json";
         StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(product));
         HttpResponseMessage resp = await PostAsync(route, requestContent);
+        resp.EnsureSuccessStatusCode();
         string responseContent = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<Product>(responseContent);
     }
@@ -350,6 +352,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
         string route = $"/v1/shops/{shopId}/products.json";
         StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(product));
         HttpResponseMessage resp = await PutAsync(route, requestContent);
+        resp.EnsureSuccessStatusCode();
         string responseContent = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<Product>(responseContent);
     }
@@ -362,7 +365,8 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     public async void DeleteProduct(int shopId, string productId)
     {
         string route = $"/v1/shops/{shopId}/products/{productId}.json";
-        await DeleteAsync(route);
+        HttpResponseMessage resp = await DeleteAsync(route);
+        resp.EnsureSuccessStatusCode();
     }
 
     /// <summary>
@@ -374,7 +378,8 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = $"/v1/shops/{shopId}/products/{productId}/publish.json";
         StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(publishProductRequest));
-        await PostAsync(route, requestContent);
+        HttpResponseMessage resp = await PostAsync(route, requestContent);
+        resp.EnsureSuccessStatusCode();
     }
 
     /// <summary>
@@ -386,7 +391,8 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = $"/v1/shops/{shopId}/products/{productId}/publish.json";
         StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(publishProductSucceededRequest));
-        await PostAsync(route, requestContent);
+        HttpResponseMessage resp = await PostAsync(route, requestContent);
+        resp.EnsureSuccessStatusCode();
     }
 
     /// <summary>
@@ -398,7 +404,8 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = $"/v1/shops/{shopId}/products/{productId}/publishing_failed.json";
         StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(publishProductFailedRequest));
-        await PostAsync(route, requestContent);
+        HttpResponseMessage resp = await PostAsync(route, requestContent);
+        resp.EnsureSuccessStatusCode();
     }
 
     /// <summary>
@@ -409,7 +416,8 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     public async Task UnpublishProductAsync(int shopId, string productId)
     {
         string route = $"/v1/shops/{shopId}/products/{productId}/unpublish.json";
-        await PostAsync(route, null);
+        HttpResponseMessage resp = await PostAsync(route, null);
+        resp.EnsureSuccessStatusCode();
     }
 
     #endregion
@@ -438,6 +446,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
             route += "?" + queryString.ToString();
         }
         HttpResponseMessage resp = await GetAsync(route);
+        resp.EnsureSuccessStatusCode();
         string content = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<PaginatedResponse<ImageUpload>>(content);
     }
@@ -451,6 +460,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = $"/v1/uploads/{uploadId}.json";
         HttpResponseMessage resp = await GetAsync(route);
+        resp.EnsureSuccessStatusCode();
         string content = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<ImageUpload>(content);
     }
@@ -465,6 +475,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
         string route = $"/v1/uploads/images.json";
         StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(imageUploadRequest));
         HttpResponseMessage resp = await PostAsync(route, requestContent);
+        resp.EnsureSuccessStatusCode();
         string responseContent = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<ImageUpload>(responseContent);
     }
@@ -479,6 +490,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
         string route = $"/v1/uploads/images.json";
         StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(imageUploadRequest));
         HttpResponseMessage resp = await PostAsync(route, requestContent);
+        resp.EnsureSuccessStatusCode();
         string responseContent = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<ImageUpload>(responseContent);
     }
@@ -492,6 +504,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = $"/v1/uploads/{uploadId}/archive.json";
         HttpResponseMessage resp = await PostAsync(route, null);
+        resp.EnsureSuccessStatusCode();
         await resp.Content.ReadAsStringAsync();
     }
 
@@ -508,6 +521,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     {
         string route = $"/v1/shops/{shopId}/webhooks.json";
         HttpResponseMessage resp = await GetAsync(route);
+        resp.EnsureSuccessStatusCode();
         string content = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<List<Webhook>>(content);
     }
@@ -522,6 +536,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
         string route = $"/v1/shops/{shopId}/webhooks.json";
         StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(webhookCreateRequest));
         HttpResponseMessage resp = await PostAsync(route, requestContent);
+        resp.EnsureSuccessStatusCode();
         string responseContent = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<Webhook>(responseContent);
     }
@@ -536,6 +551,7 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
         string route = $"/v1/shops/{shopId}/webhooks/{webhookId}.json";
         StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(webhookUpdateRequest));
         HttpResponseMessage resp = await PutAsync(route, requestContent);
+        resp.EnsureSuccessStatusCode();
         string responseContent = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<Webhook>(responseContent);
     }
@@ -548,7 +564,8 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     public async Task DeleteWebhookAsync(int shopId, string webhookId)
     {
         string route = $"/v1/shops/{shopId}/webhooks/{webhookId}.json";
-        await DeleteAsync(route);
+        HttpResponseMessage resp = await DeleteAsync(route);
+        resp.EnsureSuccessStatusCode();
     }
 
     #endregion
