@@ -17,7 +17,7 @@ namespace PrintifyApi.V1.Models.Shops.Products
         public double Y { get; set; }
 
         [JsonProperty("angle")]
-        public double Angle { get; set; }
+        public int Angle { get; set; }
 
     }
 

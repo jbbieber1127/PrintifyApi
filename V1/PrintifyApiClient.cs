@@ -8,6 +8,7 @@ using PrintifyApi.V1.Models.Shops.Products;
 using PrintifyApi.V1.Models.Shops.Webhooks;
 using PrintifyApi.V1.Models.Uploads;
 using System.Collections.Specialized;
+using System.Net.Http.Headers;
 using System.Threading.RateLimiting;
 
 namespace PrintifyApi.V1;
@@ -334,13 +335,12 @@ public class PrintifyApiClient : HttpClient, IPrintifyApiClient
     public async Task<Product> CreateProductAsync(int shopId, Product product)
     {
         string route = $"/v1/shops/{shopId}/products.json";
-        StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(product));
+        StringContent requestContent = new(Newtonsoft.Json.JsonConvert.SerializeObject(product), MediaTypeHeaderValue.Parse("text/json"));
         HttpResponseMessage resp = await PostAsync(route, requestContent);
         resp.EnsureSuccessStatusCode();
         string responseContent = await resp.Content.ReadAsStringAsync();
         return Newtonsoft.Json.JsonConvert.DeserializeObject<Product>(responseContent);
     }
-
 
     /// <summary>
     /// Update a product
