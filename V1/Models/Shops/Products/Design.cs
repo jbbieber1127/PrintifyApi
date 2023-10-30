@@ -27,10 +27,10 @@ namespace PrintifyApi.V1.Models.Shops.Products
         public string Type { get; set; }
 
         [JsonProperty("height")]
-        public int Height { get; set; }
+        public double Height { get; set; }
 
         [JsonProperty("width")]
-        public int Width { get; set; }
+        public double Width { get; set; }
 
     }
 }
