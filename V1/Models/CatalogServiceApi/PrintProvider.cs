@@ -60,5 +60,36 @@ namespace PrintifyApi.V1.Models.CatalogServiceApi
 
         [JsonProperty("options")]
         public List<Option> Options { get; set; }
+
+        [JsonProperty("launched")]
+        public bool Launched { get; set; }
+
+        [JsonProperty("print_file_format")]
+        public string PrintFileFormat { get; set; }
+
+        [JsonProperty("pp_ids")]
+        public string PpIds { get; set; }
+
+        [JsonProperty("facility_ids")]
+        public string FacilityIds { get; set; }
+
+
+        [JsonProperty("available")]
+        public bool Available { get; set; }
+
+
+        [JsonProperty("views")]
+        public List<View> Views { get; set; }
+
+        [JsonProperty("prints")]
+        public List<Print> Prints { get; set; }
+
+
+        [JsonProperty("underbase")]
+        public Underbase Underbase { get; set; }
+
+
+        [JsonProperty("maxPrice")]
+        public int MaxPrice { get; set; }
     }
 }

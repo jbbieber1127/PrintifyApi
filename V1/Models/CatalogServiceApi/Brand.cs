@@ -1,7 +1,7 @@
 using Newtonsoft.Json; 
 namespace PrintifyApi.V1.Models.CatalogServiceApi{ 
 
-    public class ColorGroup
+    public class Brand
     {
         [JsonProperty("id")]
         public int Id { get; set; }
@@ -9,8 +9,11 @@ namespace PrintifyApi.V1.Models.CatalogServiceApi{
         [JsonProperty("name")]
         public string Name { get; set; }
 
-        [JsonProperty("color")]
-        public string Color { get; set; }
+        [JsonProperty("logo")]
+        public string Logo { get; set; }
+
+        [JsonProperty("url")]
+        public string Url { get; set; }
     }
 
 }

@@ -21,5 +21,27 @@ namespace PrintifyApi.V1.Models.CatalogServiceApi
 
         [JsonProperty("costs")]
         public List<Cost> Costs { get; set; }
+
+        [JsonProperty("description")]
+        public string Description { get; set; }
+
+        [JsonProperty("weight")]
+        public double Weight { get; set; }
+
+
+        [JsonProperty("on")]
+        public int On { get; set; }
+
+
+        [JsonProperty("label")]
+        public string Label { get; set; }
+
+        [JsonProperty("sku")]
+        public string Sku { get; set; }
+
+
+        [JsonProperty("profit")]
+        public int Profit { get; set; }
+
     }
 }

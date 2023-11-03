@@ -17,7 +17,7 @@ namespace PrintifyApi.V1.Models.Shops.Products
         public List<string> Tags { get; set; }
 
         [JsonProperty("options")]
-        public List<Option> Options { get; set; }
+        public List<OptionValue> Options { get; set; }
 
         [JsonProperty("variants")]
         public List<Variant> Variants { get; set; }

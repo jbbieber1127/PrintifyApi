@@ -1,7 +1,6 @@
-﻿using Newtonsoft.Json;
+using Newtonsoft.Json; 
+namespace PrintifyApi.V1.Models.CatalogServiceApi{ 
 
-namespace PrintifyApi.V1.Models.CatalogServiceApi
-{
     public class CareSet
     {
         [JsonProperty("set")]
@@ -12,5 +11,9 @@ namespace PrintifyApi.V1.Models.CatalogServiceApi
 
         [JsonProperty("option")]
         public string Option { get; set; }
+
+        [JsonProperty("checked")]
+        public int Checked { get; set; }
     }
+
 }

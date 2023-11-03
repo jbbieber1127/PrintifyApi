@@ -2,7 +2,7 @@
 
 namespace PrintifyApi.V1.Models.Shops.Products
 {
-    public class Option
+    public class OptionValue
     {
         [JsonProperty("name")]
         public string Name { get; set; }
