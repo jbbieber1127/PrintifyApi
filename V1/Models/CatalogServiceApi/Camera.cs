@@ -1,4 +1,6 @@
-using Newtonsoft.Json; 
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+
 namespace PrintifyApi.V1.Models.CatalogServiceApi{ 
 
     public class Camera
@@ -34,7 +36,7 @@ namespace PrintifyApi.V1.Models.CatalogServiceApi{
         public BlenderJson BlenderJson { get; set; }
 
         [JsonProperty("placeholders")]
-        public Placeholders Placeholders { get; set; }
+        public JObject Placeholders { get; set; }
 
         [JsonProperty("camera_id")]
         public int CameraId { get; set; }

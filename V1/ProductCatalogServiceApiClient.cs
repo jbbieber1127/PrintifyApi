@@ -50,13 +50,13 @@ namespace PrintifyApi.V1
         }
 
 
-        public async Task<BlueprintDetails> GetBlueprintPrintProviderDetailsAsync(int blueprintId, int printProviderId)
+        public async Task<BlueprintPrintProviderDetails> GetBlueprintPrintProviderDetailsAsync(int blueprintId, int printProviderId)
         {
-            string route = $"/product-catalog-service/api/v1/blueprints/{blueprintId}/{printProviderId}";
+            string route = $"/api/v1/blueprints/{blueprintId}/{printProviderId}";
             HttpResponseMessage resp = await GetAsync(route);
             resp.EnsureSuccessStatusCode();
             string content = await resp.Content.ReadAsStringAsync();
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<BlueprintDetails>(content);
+            return Newtonsoft.Json.JsonConvert.DeserializeObject<BlueprintPrintProviderDetails>(content);
         }
 
         //public async Task<Object> SearchCatalogAsync(int page = 1, int limit = 24, Filters filters, tags)

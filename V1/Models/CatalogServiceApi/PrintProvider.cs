@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace PrintifyApi.V1.Models.CatalogServiceApi
 {
@@ -86,7 +87,7 @@ namespace PrintifyApi.V1.Models.CatalogServiceApi
 
 
         [JsonProperty("underbase")]
-        public Underbase Underbase { get; set; }
+        public JObject Underbase { get; set; }
 
 
         [JsonProperty("maxPrice")]

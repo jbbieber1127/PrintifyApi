@@ -5,24 +5,24 @@ namespace PrintifyApi.V1.Models.CatalogServiceApi
     public class Cost
     {
         [JsonProperty("blank")]
-        public int Blank { get; set; }
+        public double Blank { get; set; }
 
         [JsonProperty("fee")]
-        public int Fee { get; set; }
+        public double Fee { get; set; }
 
         [JsonProperty("margin")]
-        public int Margin { get; set; }
+        public double Margin { get; set; }
 
         [JsonProperty("printing")]
-        public int Printing { get; set; }
+        public double Printing { get; set; }
 
         [JsonProperty("placeholders")]
         public List<string> Placeholders { get; set; }
 
         [JsonProperty("result")]
-        public int Result { get; set; }
+        public double Result { get; set; }
 
         [JsonProperty("resultSubscription")]
-        public int ResultSubscription { get; set; }
+        public double ResultSubscription { get; set; }
     }
 }

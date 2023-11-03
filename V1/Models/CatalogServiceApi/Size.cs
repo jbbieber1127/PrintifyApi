@@ -10,10 +10,10 @@ namespace PrintifyApi.V1.Models.CatalogServiceApi{
         public string Origin { get; set; }
 
         [JsonProperty("rotation")]
-        public int Rotation { get; set; }
+        public double Rotation { get; set; }
 
         [JsonProperty("offsetx")]
-        public int Offsetx { get; set; }
+        public double Offsetx { get; set; }
 
         [JsonProperty("offsety")]
         public double Offsety { get; set; }
@@ -25,7 +25,7 @@ namespace PrintifyApi.V1.Models.CatalogServiceApi{
         public int RecommendedDpi { get; set; }
 
         [JsonProperty("width")]
-        public int Width { get; set; }
+        public double Width { get; set; }
 
         [JsonProperty("height")]
         public double Height { get; set; }

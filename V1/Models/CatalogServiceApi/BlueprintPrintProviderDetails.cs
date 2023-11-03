@@ -1,8 +1,8 @@
-using Newtonsoft.Json; 
-using System.Collections.Generic; 
-namespace PrintifyApi.V1.Models.CatalogServiceApi{ 
+using Newtonsoft.Json;
+namespace PrintifyApi.V1.Models.CatalogServiceApi
+{
 
-    public class Root
+    public class BlueprintPrintProviderDetails
     {
         [JsonProperty("_id")]
         public string Id { get; set; }
