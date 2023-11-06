@@ -14,13 +14,13 @@ namespace PrintifyApi.V1
     /// <para />
     /// This interface does not require authentication, but I've still included a rate limiting implementation. Let's be respectful of Printify's services.
     /// </summary>
-    public class ProductCatalogServiceApiClient : HttpClient
+    public class PrintifyClient : HttpClient
     {
 
         /// <summary>
         /// A constructor that adds rate limiting
         /// </summary>
-        public ProductCatalogServiceApiClient(string baseUrl, int maxRequestsRate, TimeSpan ratePeriod) : base(new ClientSideRateLimitedHandler(new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions()
+        public PrintifyClient(string baseUrl, int maxRequestsRate, TimeSpan ratePeriod) : base(new ClientSideRateLimitedHandler(new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions()
         {
             TokenLimit = maxRequestsRate,
             ReplenishmentPeriod = ratePeriod,
@@ -34,7 +34,7 @@ namespace PrintifyApi.V1
             BaseAddress = new Uri(baseUrl);
         }
 
-        public ProductCatalogServiceApiClient(string baseUrl)
+        public PrintifyClient(string baseUrl)
         {
             BaseAddress = new Uri(baseUrl);
         }
